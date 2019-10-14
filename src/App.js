@@ -1,7 +1,14 @@
 import React from 'react';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import Register from './components/register.js';
+import Login from './components/login.js';
+import axios from 'axios';
+import Auth from './components/auth.js';
+import ProtectedRoute from './components/protectedRoute.js';
+import Payment from './components/payment.js';
 
-class App extends React.Component  {
+class App extends React.Component  { 
   constructor(props) {
     super(props);
 
@@ -12,7 +19,9 @@ class App extends React.Component  {
         {latitude: 65.020885, longitude: 25.468680},
         {latitude: 65.005526, longitude: 25.543921},
         {latitude: 64.992263, longitude: 25.540666}
-      ]
+      ],
+      loggedIn: false,
+      userData: null  
     }
   }
 
@@ -26,15 +35,37 @@ class App extends React.Component  {
     })
   }
 
+  loginSucces = () => {
+    this.setState({loggedIn: true});
+  }
+
+  loginFail = () => {
+    this.setState({loggedIn: false});
+  }
+
+  loadProtectedData = () => {
+    axios.get('http://localhost:4000/auth', Auth.getAxiosAuth()).then(results => {
+      this.setState({ userData: results.data });
+    })
+  }
+
   render() {
     return (
-        <Map
-          google={this.props.google}
-          zoom={8}
-          initialCenter={{ lat: 65.016765, lng: 25.489747}}
-        >
-          {this.showMarkers()}
-        </Map>
+      <Router>     
+        <Map google={this.props.google} zoom={8} initialCenter={{ lat: 65.016765, lng: 25.489747}}>{this.showMarkers()}</Map>        
+        <div className="sidebar">
+          <Link className="lnk reg" to="/register">Register</Link>
+          <Link className="lnk" to="/login">Login</Link>
+          <Switch>
+            <Route path={'/login'} exact render={(routeProps ) => <Login {...routeProps } loginSucces={this.loginSucces} loginFail={this.loginFail} />}  />
+            <Route path={'/register'} exact render={(routeProps ) => <Register {...routeProps } />}  />
+            <ProtectedRoute loggedIn={this.state.loggedIn} path={'/payment'} exact render={(routeProps ) =>
+                <Payment loadProtectedData={this.loadProtectedData} userData={this.state.userData} />
+              }>
+            </ProtectedRoute>
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }

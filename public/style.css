@@ -1,3 +1,41 @@
 body{
 	margin: 0 auto;
 } 
+
+.sidebar{
+	position: absolute;
+    background-color: white;
+    height: 100vh;
+    width: 280px;
+    padding: 15px;
+}
+
+.loginForm{
+	margin: 10px 0px;
+}
+
+.loginForm input{
+	display: block;
+	margin-bottom: 5px;
+}
+
+.reg{
+	margin-right: 10px;
+}
+
+.loginForm .lnk{
+	margin-right: 10px;
+}
+
+.registerForm{
+	margin: 10px 0px;
+}
+
+.registerForm input{
+	display: block;
+	margin-bottom: 5px;
+}
+
+.registerForm .lnk{
+	margin-right: 10px;
+}
