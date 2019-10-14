@@ -21,7 +21,7 @@ export default function Register(props) {
         <input type="text" name="username" placeholder="Username" />
         <input type="password" name="password" placeholder="Password" />
         <Link to="/" className="lnk">Back</Link>
-        <button type="submit">Login</button>
+        <button type="submit">Register</button>
       </form>      
     );
 }
