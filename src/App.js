@@ -13,27 +13,35 @@ class App extends React.Component  {
     super(props);
 
     this.state = {
-      location: [
-        {latitude: 64.978134, longitude: 25.484502},
-        {latitude: 65.034004, longitude: 25.502414},
-        {latitude: 65.020885, longitude: 25.468680},
-        {latitude: 65.005526, longitude: 25.543921},
-        {latitude: 64.992263, longitude: 25.540666}
-      ],
+      // location: [
+      //   {latitude: 64.978134, longitude: 25.484502},
+      //   {latitude: 65.034004, longitude: 25.502414},
+      //   {latitude: 65.020885, longitude: 25.468680},
+      //   {latitude: 65.005526, longitude: 25.543921},
+      //   {latitude: 64.992263, longitude: 25.540666}
+      // ],
+      locations: [],
       loggedIn: false,
       userData: null  
     }
   }
 
+  componentDidMount = () => {    
+    axios.get('http://localhost:4000/chargers').then(result => {
+      this.setState({ locations: result.data });
+    })
+  }
+
   showMarkers = () => {
-    return this.state.location.map((location, index) => {
+    return this.state.locations.map((locations, index) => {
+      console.log(locations);
       return <Marker key={index} id={index} position={{
-       lat: location.latitude,
-       lng: location.longitude
+       lat: locations.latitude,
+       lng: locations.longitude
      }}
      onClick={() => console.log("You clicked me!")} />
     })
-  }
+  } 
 
   loginSucces = () => {
     this.setState({loggedIn: true});
