@@ -1,19 +1,15 @@
 import React from 'react'
-// import Auth from './components/Auth';
 import { Redirect, Route } from "react-router-dom";
 
 export default function ProtectedRoute(props) {
   const { loggedIn, ...rest } = props;
   let output;
 
-  if(loggedIn)
-  {
+  if(loggedIn){
     output = <Route {...rest} />
-  }
-  else
-  {
+  } else {
     output = <Redirect to='/' />;
   }
 
-  return <React.Fragment>{ output }</React.Fragment>
+  return <>{output}</>
 }
