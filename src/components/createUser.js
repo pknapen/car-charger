@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-let userInfo = {
+let userInfos = {
   username: null,
   password: null
 }
@@ -11,12 +11,12 @@ let createUser = {
         axios({
           method: 'post',
           url: 'http://localhost:4000/users',
-          user: {
+          data: {
             username: username,
             password: password
           }
         }).then(result => {
-            userInfo = {
+            userInfos = {
               username: username,
               password: password
             }
@@ -25,6 +25,8 @@ let createUser = {
           .catch(error => 
             {
               console.log(error);
+              console.log(username);
+              console.log(password);
               reject();
             }
           )
@@ -32,7 +34,7 @@ let createUser = {
     },
     getAxiosAuth: () => {
       return {
-        user: userInfo
+        data: userInfos
       }
     } 
 }
