@@ -7,6 +7,7 @@ import axios from 'axios';
 import Auth from './components/auth.js';
 import ProtectedRoute from './components/protectedRoute.js';
 import Payment from './components/payment.js';
+import SingleCharger from './components/singleCharger.js'
 
 class App extends React.Component  { 
   constructor(props) {
@@ -39,9 +40,15 @@ class App extends React.Component  {
        lat: locations.latitude,
        lng: locations.longitude
      }}
-     onClick={() => console.log("You clicked me!")} />
+     onClick={() => 
+      // <Link to="/users/:id"></Link>
+      console.log("You clicked me!")} />
     })
   } 
+
+  getChargerInfo = (chargerid) => {
+    return this.state.locations.find(item => item.id === chargerid);
+  }
 
   loginSucces = () => {
     this.setState({loggedIn: true});
@@ -52,7 +59,7 @@ class App extends React.Component  {
   }
 
   loadProtectedData = () => {
-    axios.get('http://localhost:4000/auth', Auth.getAxiosAuth()).then(results => {
+    axios.get('http://ec2-3-83-29-53.compute-1.amazonaws.com/auth', Auth.getAxiosAuth()).then(results => {
       this.setState({ userData: results.data });
     })
   }
@@ -71,6 +78,7 @@ class App extends React.Component  {
                 <Payment loadProtectedData={this.loadProtectedData} userData={this.state.userData} />
               }>
             </ProtectedRoute>
+            <Route path={'/users/:id'} exact render={(routeProps ) => <SingleCharger {...routeProps } getChargerInfo={this.getChargerInfo} />}  />
           </Switch>
         </div>
       </Router>
