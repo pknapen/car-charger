@@ -1,13 +1,15 @@
 import React from 'react';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { Router, Route, Switch, Link, withRouter } from "react-router-dom";
 import Register from './components/register.js';
 import Login from './components/login.js';
 import axios from 'axios';
 import Auth from './components/auth.js';
 import ProtectedRoute from './components/protectedRoute.js';
 import Payment from './components/payment.js';
-import SingleCharger from './components/singleCharger.js'
+import SingleCharger from './components/singleCharger.js';
+import history from './components/history';
+
 
 class App extends React.Component  { 
   constructor(props) {
@@ -35,19 +37,23 @@ class App extends React.Component  {
 
   showMarkers = () => {
     return this.state.locations.map((locations, index) => {
-      console.log(locations);
+      console.log("name"+locations);
       return <Marker key={index} id={index} position={{
        lat: locations.latitude,
        lng: locations.longitude
-     }}
-     onClick={() => 
-      // <Link to="/users/:id"></Link>
-      console.log("You clicked me!")} />
+      }}
+       onClick={() => this.onMarkerClick()} />
     })
   } 
 
+  onMarkerClick = () => {
+    return this.state.locations.map((locations) => {
+      history.push('/chargers/'+locations.id);
+    })
+  }
+
   getChargerInfo = (chargerid) => {
-    return this.state.locations.find(item => item.id === chargerid);
+    return this.state.locations.find(locationn => locationn.id === chargerid)
   }
 
   loginSucces = () => {
@@ -66,7 +72,7 @@ class App extends React.Component  {
 
   render() {
     return (
-      <Router>     
+      <Router history={history}>     
         <Map google={this.props.google} zoom={8} initialCenter={{ lat: 65.016765, lng: 25.489747}}>{this.showMarkers()}</Map>        
         <div className="sidebar">
           <Link className="lnk reg" to="/register">Register</Link>
@@ -78,7 +84,7 @@ class App extends React.Component  {
                 <Payment loadProtectedData={this.loadProtectedData} userData={this.state.userData} />
               }>
             </ProtectedRoute>
-            <Route path={'/users/:id'} exact render={(routeProps ) => <SingleCharger {...routeProps } getChargerInfo={this.getChargerInfo} />}  />
+            <Route path={'/chargers/:id'} exact render={(routeProps ) => <SingleCharger {...routeProps } getChargerInfo={this.getChargerInfo} />}  />
           </Switch>
         </div>
       </Router>

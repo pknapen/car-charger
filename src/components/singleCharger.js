@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 
 export default class SingleCharger extends React.Component {
   render(){
+    console.log(this.props);
     const chargerData = this.props.getChargerInfo(parseInt(this.props.match.params.id));
-    let chargerid = this.props.match.params.id - 1;
+    console.log(chargerData);
   return (
   <div>
       <h2>Name: { chargerData.name }</h2>
