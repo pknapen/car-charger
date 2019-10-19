@@ -36,20 +36,18 @@ class App extends React.Component  {
   }
 
   showMarkers = () => {
-    return this.state.locations.map((locations, index) => {
-      console.log("name"+locations);
+    return this.state.locations.map((locations, index, e) => {
       return <Marker key={index} id={index} position={{
        lat: locations.latitude,
        lng: locations.longitude
       }}
-       onClick={() => this.onMarkerClick()} />
+       onClick={() => this.onMarkerClick(index)} />
     })
   } 
 
-  onMarkerClick = () => {
-    return this.state.locations.map((locations) => {
-      history.push('/chargers/'+locations.id);
-    })
+  onMarkerClick = (index) => {
+    let chargerNo = index + 1;
+    history.push('/chargers/' + chargerNo);
   }
 
   getChargerInfo = (chargerid) => {
