@@ -36,7 +36,7 @@ class App extends React.Component  {
   }
 
   showMarkers = () => {
-    return this.state.locations.map((locations, index, e) => {
+    return this.state.locations.map((locations, index) => {
       return <Marker key={index} id={index} position={{
        lat: locations.latitude,
        lng: locations.longitude
