@@ -25,6 +25,7 @@ class App extends React.Component  {
       // ],
       locations: [],
       loggedIn: false,
+      inputValue: "",
       userData: null  
     }
   }
@@ -36,7 +37,8 @@ class App extends React.Component  {
   }
 
   showMarkers = () => {
-    return this.state.locations.map((locations, index) => {
+    const searching = this.state.locations.filter(this.showItems(this.state.inputValue))
+    return searching.map((locations, index) => {
       return <Marker key={index} id={index} position={{
        lat: locations.latitude,
        lng: locations.longitude
@@ -52,6 +54,17 @@ class App extends React.Component  {
 
   getChargerInfo = (chargerid) => {
     return this.state.locations.find(locationn => locationn.id === chargerid)
+  }
+
+  showItems(inputValue){
+    return function(x){
+      return x.name.toLowerCase().includes(inputValue.toLowerCase()) || !inputValue;
+    }
+  }
+
+  textInputChange = (event) => {
+    this.setState({inputValue: event.target.value});
+    console.log(this.state.inputValue);
   }
 
   loginSucces = () => {
@@ -71,10 +84,11 @@ class App extends React.Component  {
   render() {
     return (
       <Router history={history}>     
-        <Map google={this.props.google} zoom={8} initialCenter={{ lat: 65.016765, lng: 25.489747}}>{this.showMarkers()}</Map>        
+      <Map google={this.props.google} zoom={8} initialCenter={{ lat: 65.016765, lng: 25.489747}}>{this.showMarkers()}</Map>        
         <div className="sidebar">
           <Link className="lnk reg" to="/register">Register</Link>
           <Link className="lnk" to="/login">Login</Link>
+          <input className="searchbar" type="text" value={this.state.inputValue} onChange={this.textInputChange} />
           <Switch>
             <Route path={'/login'} exact render={(routeProps ) => <Login {...routeProps } loginSucces={this.loginSucces} loginFail={this.loginFail} />}  />
             <Route path={'/register'} exact render={(routeProps ) => <Register {...routeProps } />}  />

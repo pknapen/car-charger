@@ -7,8 +7,8 @@ export default class SingleCharger extends React.Component {
   return (
   <div>
       <h2>Name: { chargerData.name }</h2>
-      <h4>Id: { chargerData.id }</h4>
       <p>Code:{ chargerData.code }</p>
+      <p>Type:{ chargerData.type }</p>
       <Link to="/">Back</Link>
     </div>
   );

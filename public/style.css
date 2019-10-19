@@ -39,3 +39,8 @@ body{
 .registerForm .lnk{
 	margin-right: 10px;
 }
+
+.searchbar{
+	display: block;
+	margin: 10px 0px;
+}
