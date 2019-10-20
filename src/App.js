@@ -1,6 +1,6 @@
 import React from 'react';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
-import { Router, Route, Switch, Link, withRouter } from "react-router-dom";
+import { Router, Route, Switch, Link } from "react-router-dom";
 import Register from './components/register.js';
 import Login from './components/login.js';
 import axios from 'axios';
@@ -10,19 +10,11 @@ import Payment from './components/payment.js';
 import SingleCharger from './components/singleCharger.js';
 import history from './components/history';
 
-
 class App extends React.Component  { 
   constructor(props) {
     super(props);
 
     this.state = {
-      // location: [
-      //   {latitude: 64.978134, longitude: 25.484502},
-      //   {latitude: 65.034004, longitude: 25.502414},
-      //   {latitude: 65.020885, longitude: 25.468680},
-      //   {latitude: 65.005526, longitude: 25.543921},
-      //   {latitude: 64.992263, longitude: 25.540666}
-      // ],
       locations: [],
       loggedIn: false,
       inputValue: "",
@@ -40,8 +32,8 @@ class App extends React.Component  {
     const searching = this.state.locations.filter(this.showItems(this.state.inputValue))
     return searching.map((locations, index) => {
       return <Marker key={index} id={index} position={{
-       lat: locations.latitude,
-       lng: locations.longitude
+       lat: locations.longitude,
+       lng: locations.latitude
       }}
        onClick={() => this.onMarkerClick(index)} />
     })
@@ -58,13 +50,14 @@ class App extends React.Component  {
 
   showItems(inputValue){
     return function(x){
-      return x.name.toLowerCase().includes(inputValue.toLowerCase()) || !inputValue;
+      return x.name.toLowerCase().includes(inputValue.toLowerCase()) ||
+             x.location.toLowerCase().includes(inputValue.toLowerCase()) ||
+             !inputValue;
     }
   }
 
   textInputChange = (event) => {
     this.setState({inputValue: event.target.value});
-    console.log(this.state.inputValue);
   }
 
   loginSucces = () => {
@@ -76,7 +69,7 @@ class App extends React.Component  {
   }
 
   loadProtectedData = () => {
-    axios.get('http://ec2-3-83-29-53.compute-1.amazonaws.com/auth', Auth.getAxiosAuth()).then(results => {
+    axios.get('http://localhost:4000/auth', Auth.getAxiosAuth()).then(results => {
       this.setState({ userData: results.data });
     })
   }
@@ -84,7 +77,7 @@ class App extends React.Component  {
   render() {
     return (
       <Router history={history}>     
-      <Map google={this.props.google} zoom={8} initialCenter={{ lat: 65.016765, lng: 25.489747}}>{this.showMarkers()}</Map>        
+      <Map google={this.props.google} zoom={5} initialCenter={{ lat: 65.016765, lng: 25.489747}}>{this.showMarkers()}</Map>        
         <div className="sidebar">
           <Link className="lnk reg" to="/register">Register</Link>
           <Link className="lnk" to="/login">Login</Link>
